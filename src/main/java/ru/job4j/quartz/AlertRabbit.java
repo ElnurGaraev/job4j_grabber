@@ -6,6 +6,9 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Properties;
 import java.sql.*;
 
@@ -35,7 +38,6 @@ public class AlertRabbit {
             scheduler.scheduleJob(job, trigger);
             Thread.sleep(10000);
             scheduler.shutdown();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,7 +66,15 @@ public class AlertRabbit {
     public static class Rabbit implements Job {
         @Override
         public void execute(JobExecutionContext context) {
-            System.out.println("Rabbit runs here ...");
+            Connection connect = (Connection) context.getJobDetail().getJobDataMap().get("connect");
+            try (PreparedStatement statement = connect.prepareStatement(
+                    "INSERT INTO rabbit (created_date) VALUES (?)"
+            )) {
+                statement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+                statement.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
