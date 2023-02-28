@@ -21,7 +21,7 @@ public class HabrCareerParse extends HabrCareerDateTimeParser {
     public static void main(String[] args) throws Exception {
         HabrCareerParse habrCareerParse = new HabrCareerParse();
         for (int i = 1; i <= PAGES; i++) {
-                Connection connection = Jsoup.connect(PAGE_LINK + i);
+            Connection connection = Jsoup.connect(PAGE_LINK + i);
             try {
                 Document document = connection.get();
                 Elements rows = document.select(".vacancy-card__inner");
@@ -33,9 +33,8 @@ public class HabrCareerParse extends HabrCareerDateTimeParser {
                     String vacancyName = titleElement.text();
                     String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
                     LocalDateTime localDate = habrCareerParse.parse(dateTime.attr("datetime"));
-                    String date = String.format("%s", localDate.toString());
                     String description = habrCareerParse.retrieveDescription(link);
-                    System.out.printf("%s %s %s %s%n", vacancyName, link, description, date);
+                    System.out.printf("%s %s %s %s%n", localDate, vacancyName, link, description);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -56,7 +55,7 @@ public class HabrCareerParse extends HabrCareerDateTimeParser {
             Document document = connection.get();
             Elements row = document.select(".vacancy-show");
             Element showElement = row.select(".vacancy-description__text").first();
-            rsl = String.format("%s", showElement.text());
+            rsl = showElement.text();
         } catch (Exception e) {
             e.printStackTrace();
         }
