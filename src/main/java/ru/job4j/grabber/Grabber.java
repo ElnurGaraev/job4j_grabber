@@ -52,15 +52,6 @@ public class Grabber implements Grab {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
-            Properties properties = new Properties();
-            try (InputStream in = Grabber.class.getClassLoader()
-                    .getResourceAsStream("app.properties")) {
-                properties.load(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            store = new PsqlStore(properties);
-            parse = new HabrCareerParse(new HabrCareerDateTimeParser());
             List<Post> posts = parse.list("https://career.habr.com/vacancies/java_developer?page=");
             for (Post post : posts) {
                 store.save(post);
