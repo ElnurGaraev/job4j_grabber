@@ -24,7 +24,6 @@ public class Grabber implements Grab {
     private final Scheduler scheduler;
     private final int time;
 
-
     public Grabber(Parse parse, Store store,
                    Scheduler scheduler, int time) {
         this.parse = parse;
@@ -32,7 +31,6 @@ public class Grabber implements Grab {
         this.scheduler = scheduler;
         this.time = time;
     }
-
 
     public void init() throws SchedulerException {
         JobDataMap data = new JobDataMap();
@@ -64,7 +62,6 @@ public class Grabber implements Grab {
         }
     }
 
-
     public void web(Store store) {
         Properties cfg = new Properties();
         try (InputStream in = Grabber.class.getClassLoader()
@@ -90,7 +87,6 @@ public class Grabber implements Grab {
             }
         }).start();
     }
-
 
     public static void main(String[] args) throws Exception {
         var cfg = new Properties();
